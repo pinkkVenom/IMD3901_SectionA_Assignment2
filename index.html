@@ -1,0 +1,97 @@
+<!--    Julia Ociesa
+        IMD 3901 Section A
+        February 11, 2023   -->
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Assignment 2 - IMD3901</title>
+      <meta name="description" content="Hello, WebVR! - A-Frame">
+      <!--  note we are using 1.1.0 as most recent -->
+      <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+      <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+      <script src="js/animations.js"></script>
+      <link rel="stylesheet" href="css/user-gesture.css">
+    </head>
+    <body>
+        <!-- CSS file from Class, div code also from class -->
+        <div id="user-gesture-overlay">
+            <div class="center">
+                <button id="user-gesture-button" onclick="startExperience()">Enter Experience</button>
+            </div>
+        </div>
+
+      <a-scene start-experience>
+        <!-- Controls for VR hands + lasers (tested and works) -->
+        <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
+        <a-entity laser-controls="hand: left"></a-entity>
+        <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
+        <a-entity laser-controls="hand: right"></a-entity>
+
+        <!-- Camera movement code from class -->
+        <a-entity id="camera" position="0 1.6 0" camera wasd-controls look-controls>
+            <!--cursor is an invisible ray that we will check if it interacts with something when button is clicked-->
+            <a-entity cursor="rayOrigin:mouse;" raycaster="far:20; interval:200; objects:.interactive;"></a-entity>
+        </a-entity>
+
+        <a-assets timeout="10000"> <!--incase items disapear set a timeout (timeout="10000" in the assets tag)-->
+            <!-- glTF is optimized for web usage, must include response-type to change from default value (which is JSON and it'll break and not work)-->
+            <a-asset-item id="plant_model" src="/assets/models/alien_plant/scene.gltf" response-type="arraybuffer"></a-asset-item>
+            <!-- space audio from class -->
+            <audio id="space_music" src="/assets/SpaceMusic.mp3" preload="auto" crossorigin="anonymous"></audio>
+        </a-assets>
+
+        <a-entity class="ambient-sound" sound="src:#space_music; autoplay:false;"></a-entity>
+
+        <!-- All Objects in the scene
+            Animation code used from https://aframe.io/docs/1.4.0/guides/building-a-basic-scene.html -->
+        <a-entity id="sphere" 
+                  position="0 6 2"
+                  geometry="primitive:sphere; radius:2.0;"
+                  material="color:rgb(200, 10, 150);"
+                  animation="property: object3D.position.y; to: 4.2; dir: alternate; dur: 2000; loop: true"></a-entity>
+        <a-entity id="sphere" 
+                  position="1 3 10"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="color:rgb(200, 10, 150);"
+                  animation="property: object3D.position.y; to: 4.2; dir: alternate; dur: 2000; loop: true"></a-entity>
+        <a-entity id="sphere2" 
+                  position="-5 3 -10"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="color:rgb(200, 10, 150);"
+                  animation="property: object3D.position.y; to: 4.2; dir: alternate; dur: 2000; loop: true"></a-entity>
+        <a-entity id="sphere1" 
+                  position="-10 6 7"
+                  geometry="primitive:sphere; radius:2.0;"
+                  material="color:rgb(200, 10, 150);"
+                  animation="property: object3D.position.y; to: 4.2; dir: alternate; dur: 2000; loop: true"></a-entity>
+        <a-entity id="sphere" 
+                  position="-13 4 -10"
+                  geometry="primitive:sphere; radius:1.0;"
+                  material="color:rgb(200, 10, 150);"
+                  animation="property: object3D.position.y; to: 3.2; dir: alternate; dur: 2000; loop: true"></a-entity>
+        <!-- Alien Plant from SketchFab by user Duznot, credits page in assets/models folder -->
+        <a-entity id="alient_plant" position="15 0 15" rotation="0 -90 0" scale="0.5 0.5 0.5"
+                  gltf-model="#plant_model"
+                  animation_mousedown="startEvents:mousedown"
+                  animation_mousemove="startEvents:mousemove"
+                  animation_mouseleave="startEvents:mouseleave"></a-entity>
+        <a-entity id="alient_plant" position="-15 0 -15" rotation="0 90 0" scale="0.5 0.5 0.5"
+                  gltf-model="#plant_model"></a-entity>
+        <a-entity id="alient_plant" position="-15 0 15" rotation="0 -90 0" scale="0.5 0.5 0.5"
+                  gltf-model="#plant_model"></a-entity>
+        <a-entity id="alient_plant" position="15 0 -15" rotation="0 -58 0" scale="0.5 0.5 0.5"
+                  gltf-model="#plant_model"></a-entity>
+        
+        <!-- Button code from class -->
+        <a-entity id="universal_button">
+            <a-entity   class="interactive button" position="0 0.6 0" geometry="primitive:cylinder; radius:0.15; height: 0.2;" material="color:rgb(255,100,100);"
+                    animation__mouseenter="property:material.color; type:color; to:rgb(255,0,0); startEvents:mouseenter; dur:200;"
+                    animation__mouseleave="property:material.color; type:color; to:rgb(255,100,100); startEvents:mouseleave; dur:200;"
+                    animation__click="property:position.y; from:0.55; to:0.6; startEvents:click; dur:300;" delete-item></a-entity>
+            <a-entity position="0 0.3 0" geometry="primitive:box; width:0.5; depth:0.5; height:0.6;" material="color:rgb(150, 30, 150);" shadow></a-entity>
+        </a-entity>         
+        
+        <a-entity id="environment" environment="preset:dream;"></a-entity>
+      </a-scene>
+    </body>
+</html>
